@@ -9,6 +9,9 @@ import { AppService } from './app.service';
 import { PrismaModule } from './core/prisma/prisma.module';
 import { LoggerModule } from './core/logger/logger.module';
 
+// Infrastructure modules
+import { EmailModule } from './infrastructure/email/email.module';
+
 // Common
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
@@ -32,6 +35,9 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     // Core modules
     PrismaModule,
     LoggerModule,
+
+    // Infrastructure modules
+    EmailModule,
 
     // Business modules will be added here
     // AuthModule,
