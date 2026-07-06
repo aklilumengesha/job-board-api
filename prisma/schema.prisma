@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  password   String
+  firstName  String
+  lastName   String
+  role       UserRole @default(JOB_SEEKER)
+  isVerified Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  jobSeeker JobSeeker?
+  employer  Employer?
+
+  @@map("users")
+}
+
+enum UserRole {
+  JOB_SEEKER
+  EMPLOYER
+  ADMIN
+}
+
+model JobSeeker {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone      String?
+  resumeUrl  String?
+  skills     String[]
+  experience Int? // Years
+  location   String?
+  bio        String?
+
+  applications Application[]
+  savedJobs    SavedJob[]
+
+  @@map("job_seekers")
+}
+
+model Employer {
+  id          String  @id @default(uuid())
+  userId      String  @unique
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName String
+  companyLogo String?
+  website     String?
+  location    String?
+  description String?
+  industry    String?
+
+  jobs Job[]
+
+  @@map("employers")
+}
+
+model Job {
+  id              String          @id @default(uuid())
+  employerId      String
+  employer        Employer        @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  title           String
+  description     String
+  requirements    String[]
+  location        String
+  jobType         JobType
+  experienceLevel ExperienceLevel
+  salaryMin       Int?
+  salaryMax       Int?
+  categoryId      String?
+  category        Category?       @relation(fields: [categoryId], references: [id])
+  status          JobStatus       @default(ACTIVE)
+  views           Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  expiresAt       DateTime?
+
+  applications Application[]
+  savedBy      SavedJob[]
+
+  @@index([status, createdAt])
+  @@index([location])
+  @@index([jobType])
+  @@index([categoryId])
+  @@map("jobs")
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+}
+
+enum ExperienceLevel {
+  ENTRY
+  JUNIOR
+  MID
+  SENIOR
+  LEAD
+}
+
+enum JobStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+  EXPIRED
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  jobId       String
+  job         Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobSeekerId String
+  jobSeeker   JobSeeker         @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+  coverLetter String?
+  resumeUrl   String
+  status      ApplicationStatus @default(PENDING)
+  appliedAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([jobId, jobSeekerId])
+  @@index([jobId])
+  @@index([jobSeekerId])
+  @@map("applications")
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  ACCEPTED
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+  icon        String?
+  jobs        Job[]
+
+  @@map("categories")
+}
+
+model SavedJob {
+  id          String    @id @default(uuid())
+  jobSeekerId String
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+  jobId       String
+  job         Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  savedAt     DateTime  @default(now())
+
+  @@unique([jobSeekerId, jobId])
+  @@map("saved_jobs")
+}
