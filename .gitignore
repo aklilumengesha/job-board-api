@@ -79,3 +79,10 @@ pnpm-lock.yaml
 
 # Docker
 .dockerignore
+
+# Uploaded files
+/uploads/*
+!/uploads/.gitkeep
+uploads/resumes/*
+uploads/logos/*
+uploads/general/*

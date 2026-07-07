@@ -11,6 +11,7 @@ import { LoggerModule } from './core/logger/logger.module';
 
 // Infrastructure modules
 import { EmailModule } from './infrastructure/email/email.module';
+import { StorageModule } from './infrastructure/storage/storage.module';
 
 // Common
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -38,6 +39,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 
     // Infrastructure modules
     EmailModule,
+    StorageModule,
 
     // Business modules will be added here
     // AuthModule,
