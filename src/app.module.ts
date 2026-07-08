@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,6 +14,10 @@ import { EmailModule } from './infrastructure/email/email.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { QueueModule } from './infrastructure/queue/queue.module';
 import { CacheModule } from './infrastructure/cache/cache.module';
+
+// Business modules
+import { AuthModule } from './modules/auth/auth.module';
+import { JwtAuthGuard } from './modules/auth/guards';
 
 // Common
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -46,7 +50,8 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     CacheModule,
 
     // Business modules will be added here
-    // AuthModule,
+    // Business modules
+    AuthModule,
     // UserModule,
     // CompanyModule,
     // JobModule,
@@ -57,6 +62,11 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
   controllers: [AppController],
   providers: [
     AppService,
+    // Global JWT authentication guard
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     // Global exception filter
     {
       provide: APP_FILTER,
