@@ -18,6 +18,7 @@ import { CacheModule } from './infrastructure/cache/cache.module';
 // Business modules
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { CompanyModule } from './modules/company/company.module';
 import { JwtAuthGuard } from './modules/auth/guards';
 
 // Common
@@ -53,7 +54,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     // Business modules
     AuthModule,
     UserModule,
-    // CompanyModule,
+    CompanyModule,
     // JobModule,
     // ApplicationModule,
     // CategoryModule,
