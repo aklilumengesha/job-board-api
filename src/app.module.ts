@@ -21,6 +21,7 @@ import { UserModule } from './modules/user/user.module';
 import { CompanyModule } from './modules/company/company.module';
 import { JobModule } from './modules/job/job.module';
 import { ApplicationModule } from './modules/application/application.module';
+import { CategoryModule } from './modules/category/category.module';
 import { JwtAuthGuard } from './modules/auth/guards';
 
 // Common
@@ -59,7 +60,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     CompanyModule,
     JobModule,
     ApplicationModule,
-    // CategoryModule,
+    CategoryModule,
     // NotificationModule,
   ],
   controllers: [AppController],
