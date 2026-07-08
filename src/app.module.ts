@@ -19,6 +19,7 @@ import { CacheModule } from './infrastructure/cache/cache.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { CompanyModule } from './modules/company/company.module';
+import { JobModule } from './modules/job/job.module';
 import { JwtAuthGuard } from './modules/auth/guards';
 
 // Common
@@ -55,7 +56,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     AuthModule,
     UserModule,
     CompanyModule,
-    // JobModule,
+    JobModule,
     // ApplicationModule,
     // CategoryModule,
     // NotificationModule,
