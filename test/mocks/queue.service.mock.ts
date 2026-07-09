@@ -100,4 +100,24 @@ export class QueueServiceMock {
     }
     return addedJobs;
   }
+
+  async getQueueStats(queueName: string): Promise<any> {
+    return {
+      name: queueName,
+      waiting: 0,
+      active: 0,
+      completed: 0,
+      failed: 0,
+      delayed: 0,
+    };
+  }
+
+  async getAllQueuesStats(): Promise<any[]> {
+    const queueNames = Array.from(this.jobs.keys());
+    const stats = [];
+    for (const name of queueNames) {
+      stats.push(await this.getQueueStats(name));
+    }
+    return stats;
+  }
 }
