@@ -133,23 +133,61 @@ http://localhost:3000/api/docs
 
 ## 🧪 Testing
 
-### Run unit tests
+### Quick Start (E2E Tests with Docker)
 
 ```bash
-npm run test
-```
+# 1. Start test services
+docker-compose -f docker-compose.test.yml up -d
 
-### Run e2e tests
+# 2. Setup test database
+$env:DATABASE_URL="postgresql://postgres:postgres@localhost:5433/jobboard_test?schema=public"
+npx prisma migrate deploy
 
-```bash
+# 3. Run E2E tests
 npm run test:e2e
 ```
 
-### Test coverage
+### All Test Commands
 
 ```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# E2E tests (verbose)
+npm run test:e2e:verbose
+
+# E2E tests (watch mode)
+npm run test:e2e:watch
+
+# Test coverage
 npm run test:cov
+
+# Docker test services
+npm run docker:test:up      # Start
+npm run docker:test:down    # Stop
+npm run docker:test:logs    # View logs
 ```
+
+### Test Documentation
+
+- **Quick Start**: [HOW_TO_RUN_TESTS.md](./HOW_TO_RUN_TESTS.md) - Simple guide
+- **Detailed Guide**: [E2E_TESTING_GUIDE.md](./E2E_TESTING_GUIDE.md) - Comprehensive
+- **Manual Testing**: [POSTMAN_TESTING_GUIDE.md](./POSTMAN_TESTING_GUIDE.md) - Postman guide
+- **Test Summary**: [E2E_TESTS_COMPLETE.md](./E2E_TESTS_COMPLETE.md) - Overview
+
+### Test Coverage
+
+The E2E test suite covers **65+ API endpoints** across:
+- ✅ Authentication (8 tests)
+- ✅ Company Management (5 tests)
+- ✅ Category Management (5 tests)
+- ✅ Job Posting (7 tests)
+- ✅ Application Workflow (8 tests)
+- ✅ User Management (3 tests)
+- ✅ Notifications (2 tests)
 
 ## 📁 Project Structure
 
@@ -303,6 +341,9 @@ For support, email support@jobboard.com or open an issue.
 
 ## 🔗 Links
 
-- [PRD Document](./PRD.md)
-- [Folder Structure](./FOLDER_STRUCTURE.md)
-- [API Documentation](http://localhost:3000/api/docs)
+- [PRD Document](./PRD.md) - Product Requirements Document
+- [Folder Structure](./FOLDER_STRUCTURE.md) - Project structure
+- [Testing Quick Start](./HOW_TO_RUN_TESTS.md) - How to run tests
+- [E2E Testing Guide](./E2E_TESTING_GUIDE.md) - Comprehensive test guide
+- [Postman Testing](./POSTMAN_TESTING_GUIDE.md) - Manual API testing
+- [API Documentation](http://localhost:3000/api/docs) - Swagger UI
