@@ -1,7 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
+import request = require('supertest');
 import { AppModule } from './../src/app.module';
+import { CacheService } from '../src/infrastructure/cache/cache.service';
+import { QueueService } from '../src/infrastructure/queue/queue.service';
+import { EmailService } from '../src/infrastructure/email/email.service';
+import { CacheServiceMock } from './mocks/cache.service.mock';
+import { QueueServiceMock } from './mocks/queue.service.mock';
+import { EmailServiceMock } from './mocks/email.service.mock';
 
 describe('Job Board API (e2e)', () => {
   let app: INestApplication;
@@ -20,10 +26,34 @@ describe('Job Board API (e2e)', () => {
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      // Override services with mocks to avoid Redis/Email dependencies
+      .overrideProvider(CacheService)
+      .useClass(CacheServiceMock)
+      .overrideProvider(QueueService)
+      .useClass(QueueServiceMock)
+      .overrideProvider(EmailService)
+      .useClass(EmailServiceMock)
+      .compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    
+    // Apply same configuration as main.ts
+    app.useGlobalPipes(new ValidationPipe({ 
+      whitelist: true, 
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }));
+    
+    // Enable API versioning (api/v1)
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1',
+      prefix: 'api/v',
+    });
+    
     await app.init();
   });
 
