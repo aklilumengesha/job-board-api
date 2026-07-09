@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
-import request = require('supertest');
+import request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { CacheService } from '../src/infrastructure/cache/cache.service';
 import { QueueService } from '../src/infrastructure/queue/queue.service';
